@@ -35,7 +35,7 @@
             <div class="pal">
                 
             </div>
-            <p class="credit">Copyright &copy; <span>2026</span> | all rights reserved. | <span>Shopixia</span></p>
+            <p class="credit">Copyright &copy; <span>2026</span> | all rights reserved. | <span>Ahatesham Rabbi - Multi Vendor Ecommerce Platform</span></p>
         </div>
      </div>
   </footer>

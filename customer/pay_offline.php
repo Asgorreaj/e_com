@@ -10,8 +10,6 @@
 				<tr class="account">
 					<th>Bank Account Number</th>
 					<th>Paypal Id</th>
-					<th>Payumoney</th>
-					<th>Paytm Number</th>
 					</tr>
 			</thead>
 			<tbody>
@@ -19,7 +17,7 @@
 					<td>2345617894325679</td>
 					<td>abc@paypal.com</td>
 					<td>************</td>
-					<td>+918295413790</td>
+					<td>+018295413790</td>
 				</tr>
 			</tbody>
 			<tbody>
@@ -27,7 +25,7 @@
 					<td>2345617894325679</td>
 					<td>abc@paypal.com</td>
 					<td>************</td>
-					<td>+918295413790</td>
+					<td>+018295413790</td>
 				</tr>
 			</tbody>
 			<tbody>
@@ -35,7 +33,7 @@
 					<td>2345617894325679</td>
 					<td>abc@paypal.com</td>
 					<td>************</td>
-					<td>+918295413790</td>
+					<td>+018295413790</td>
 				</tr>
 			</tbody>
 			<tbody>
@@ -43,7 +41,7 @@
 					<td>2345617894325679</td>
 					<td>abc@paypal.com</td>
 					<td>************</td>
-					<td>+918295413790</td>
+					<td>+018295413790</td>
 				</tr>
 			</tbody>
 		</table>

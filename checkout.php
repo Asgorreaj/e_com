@@ -11,7 +11,7 @@ include("functions/functions.php");
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopixia - Buy with Joy!</title>
+    <title>Ahatesham Rabbi - Multi Vendor Ecommerce Platform</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -53,7 +53,7 @@ include("functions/functions.php");
 
         ?>
     </a>
-<a id="pr" href="#"> Shopping Cart Total Price: $ <?php totalPrice(); ?>, Total Items <?php item(); ?></a>
+<a id="pr" href="#"> Shopping Cart Total Price: £ <?php totalPrice(); ?>, Total Items <?php item(); ?></a>
 </div>
   
 </div>
@@ -166,7 +166,7 @@ include("functions/functions.php");
 </div>
      </div>
   
-                         <div class="col-md-9" style="padding:20px;">
+                         <div class="col-md-9">
                               <?php
 
                               if (!isset($_SESSION['customer_email'])) {
