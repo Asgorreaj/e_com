@@ -50,7 +50,7 @@ include("functions/functions.php");
 
         ?>
     </a>
-<a id="pr" href="#"> Shopping Cart Total Price: $ <?php totalPrice(); ?>, Total Items <?php item(); ?></a>
+<a id="pr" href="#"> Shopping Cart Total Price: £ <?php totalPrice(); ?>, Total Items <?php item(); ?></a>
 </div>
   
 </div>
@@ -194,10 +194,10 @@ include("functions/functions.php");
              <td><img src="admin_area/product_images/<?php echo $p_img1 ?>"></td>
              <td><?php echo $p_title ?></td>
              <td><?php echo $pro_qty ?></td>
-             <td>$ <?php echo $p_price ?></td>
+             <td>£ <?php echo $p_price ?></td>
              <td><?php echo $pro_size ?></td>
              <td><input type="checkbox" name="remove[]" value="<?php echo $pro_id ?>"></td>
-             <td>$ <?php echo $sub_total ?></td>
+             <td>£ <?php echo $sub_total ?></td>
            </tr>
            <?php } } ?>
         </tfoot>
@@ -207,7 +207,7 @@ include("functions/functions.php");
           <h4>Total Price</h4>
          </div>
          <div class="pull-right">
-           <h4>$ <?php echo $total; ?></h4>
+           <h4>£ <?php echo $total; ?></h4>
          </div>
        </div>
 
@@ -261,18 +261,18 @@ echo @$up_cart=update_cart();
        <table class="table">
          <tr>
            <td>Order Sub Total</td>
-           <th>$ <?php echo $total ?></th>
+           <th>£ <?php echo $total ?></th>
          </tr>
          <tr>
            <td>Shipping and handling</td>
-           <td>$ 0</td>
+           <td>£ 0</td>
            <tr>
              <td>Tax</td>
-             <td>$ 0</td>
+             <td>£ 0</td>
            </tr>
            <tr class="Total">
             <td>Total</td>
-            <th>$ <?php echo $total ?></th>
+            <th>£ <?php echo $total ?></th>
              
            </tr>
          </tr>

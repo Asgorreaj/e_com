@@ -10,7 +10,7 @@ include("functions/functions.php");
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopixia - Buy with Joy!</title>
+    <title>Ahatesham Rabbi - Multi Vendor Ecommerce Platform</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- owl carousel css file cdn link  -->
@@ -36,7 +36,7 @@ include("functions/functions.php");
 
         ?>
     </a>
-<a id="pr" href="#"> Shopping Cart Total Price: $ <?php totalPrice(); ?>, Total Items <?php item(); ?></a>
+<a id="pr" href="#"> Shopping Cart Total Price: £ <?php totalPrice(); ?>, Total Items <?php item(); ?></a>
 </div>
 </div>
 <div class="header-2">
@@ -728,7 +728,7 @@ while ($row=mysqli_fetch_array($run_box)) {
             </div>
             <div class="pal">
             </div>
-            <p class="credit">Copyright &copy; <span>2026</span> | all rights reserved. | <span>Shopixia</span></p>
+            <p class="credit">Copyright &copy; <span>2026</span> | all rights reserved. | <span>Ahatesham Rabbi - Multi Vendor Ecommerce Platform</span></p>
         </div>
      </div>
   </footer>
