@@ -11,7 +11,7 @@ include("functions/functions.php");
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ahatesham Rabbi - Multi Vendor Ecommerce Platform</title>
+    <title>Shopixia - Multi Vendor Ecommerce Platform</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -155,7 +155,7 @@ include("functions/functions.php");
     </div>
 </div></section>  
     
-  <div class="content1" id="content1">
+  <!-- <div class="content1" id="content1">
   <div class="container1">
     <div class="col-md-3">
       <?php
@@ -164,9 +164,9 @@ include("functions/functions.php");
    
     </div>
 </div>
-     </div>
+     </div> -->
   
-                         <div class="col-md-9">
+                         <div class="col-md-12">
                               <?php
 
                               if (!isset($_SESSION['customer_email'])) {
