@@ -4,7 +4,7 @@ include("includes/db.php");
 
 include("functions/functions.php");
   ?>
-
+<?php include("header.php"); ?> 
 
 <?php
 

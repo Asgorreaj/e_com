@@ -3,393 +3,353 @@ session_start();
 include("includes/db.php");
 include("functions/functions.php");
 ?>
-<!DOCTYPE html>
-<html lang="en">
+<?php include("header.php"); ?>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ecom</title>
+<style>
+.cart-wrapper {
+    max-width: 1400px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+.cart-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+}
 
-  <!-- owl carousel css file cdn link  -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+.cart-items-section {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
 
-  <!-- font awesome cdn link  -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+.cart-items-section h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f1f2f6;
+}
 
-  <!-- custom css file link  -->
-  <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="new.css">
-  <style>
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
+}
 
+.cart-table th {
+    text-align: left;
+    padding: 12px 10px;
+    background: #f8f9fa;
+    font-size: 13px;
+    font-weight: 700;
+    color: #2d3436;
+    text-transform: uppercase;
+    border-bottom: 2px solid #e9ecef;
+}
 
-  </style>
+.cart-table td {
+    padding: 15px 10px;
+    border-bottom: 1px solid #f1f2f6;
+    vertical-align: middle;
+}
 
-</head>
+.cart-table .product-cell {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
 
-<body>
+.cart-table .product-cell img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 10px;
+    background: #f8f9fa;
+}
 
-  <!-- header section starts  -->
+.cart-table .product-cell .product-name {
+    font-weight: 600;
+    color: #2d3436;
+    font-size: 14px;
+}
 
-  <header>
+.cart-table .product-cell .product-name a {
+    color: #2d3436;
+    text-decoration: none;
+}
 
-    <div class="header-1">
+.cart-table .qty-input {
+    width: 60px;
+    padding: 6px 8px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 14px;
+}
 
-      <a href="index.php" class="logo"> <img src="website/all/logo5.svg" alt="Logo image" class="hidden-xs"> </a>
+.cart-table .price {
+    font-weight: 600;
+    color: #ff523b;
+    font-size: 15px;
+}
 
-      <div class="col-md-6 offer">
-        <a href="#" class="btn btn-sucess btn-sm">
-          <?php
+.cart-table .subtotal {
+    font-weight: 700;
+    color: #ff523b;
+    font-size: 16px;
+}
 
-          if (!isset($_SESSION['customer_email'])) {
-            echo "Welcome Guest";
-          } else {
-            echo "Welcome: " . $_SESSION['customer_email'] . "";
-          }
+.cart-table .remove-btn {
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 5px;
+}
 
+.cart-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px solid #f1f2f6;
+    flex-wrap: wrap;
+    gap: 15px;
+}
 
-          ?>
-        </a>
-        <a id="pr" href="#"> Shopping Cart Total Price: £ <?php totalPrice(); ?>, Total Items <?php item(); ?></a>
-      </div>
+.cart-actions .btn {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
 
-    </div>
+.cart-actions .btn-continue {
+    background: #e9ecef;
+    color: #2d3436;
+}
 
-    <div class="header-2">
+.cart-actions .btn-checkout {
+    background: linear-gradient(135deg, #ff523b, #ff6b5a);
+    color: #fff;
+}
 
+.order-summary {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    position: sticky;
+    top: 100px;
+}
 
-      <nav class="navbar">
+.order-summary h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f1f2f6;
+}
 
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    font-size: 15px;
+    color: #2d3436;
+}
 
-        <ul>
+.summary-row.total {
+    border-top: 2px solid #f1f2f6;
+    margin-top: 10px;
+    padding-top: 15px;
+    font-weight: 700;
+    font-size: 18px;
+    color: #ff523b;
+}
 
-          <li><a href="index.php">HOME</a></li>
-          <!-- <li><a href="trimer.php">SHOP</a></li> -->
-          <li><a href="contactus.php">CONTACT</a></li>
+.empty-cart {
+    text-align: center;
+    padding: 60px 20px;
+}
 
-          <div class="col-md-6">
-            <ul class="menu">
-              <li>
-                <div class="collapse clearfix" id="search">
-                  <!-- <form class="navbar-form" method="get" action="result.php"> -->
-                  <div class="input-group">
-                    <input type="text" name="user_query" placeholder="search" class="form-control" required="">
-                    <button type="submit" value="search" name="search" class="btn btn-primary">
-                      <i class="fa fa-search"></i>
-                    </button>
-                  </div>
-                  </form>
-                </div>
-              </li>
+.empty-cart i {
+    font-size: 64px;
+    color: #dee2e6;
+    margin-bottom: 20px;
+    display: block;
+}
 
+.empty-cart h3 {
+    font-size: 24px;
+    color: #2d3436;
+    margin-bottom: 10px;
+}
 
+.empty-cart .shop-btn {
+    display: inline-block;
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #ff523b, #ff6b5a);
+    color: #fff;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    margin-top: 15px;
+}
 
-              <li>
-                <a href="cart.php" class="">
-                  <i class="fa fa-shopping-cart"></i>
-                  <span><?php item(); ?> items in cart</span>
-                </a>
-              </li>
+@media (max-width: 768px) {
+    .cart-grid { grid-template-columns: 1fr; }
+    .order-summary { position: static; }
+    .cart-table { display: block; overflow-x: auto; }
+    .cart-actions { flex-direction: column; }
+    .cart-actions .btn { justify-content: center; }
+}
+</style>
 
-
-              <li>
-                <a href="customer_registration.php"><i class="fa fa-user-plus"></i>Register</a>
-              </li>
-              <li>
-                <?php
-
-                if (!isset($_SESSION['customer_email'])) {
-                  echo "<a href='checkout.php'>My Account</a>";
-
-                } else {
-
-                  echo "<a href='customer/my_account.php?my_order'>My Account</a>";
-
-                }
-
-                ?>
-              </li>
-
-              <li>
-                <a class="active" href="cart.php"><i class="fa fa-shopping-cart"></i>Goto Cart</a>
-              </li>
-
-              <li>
-                <?php
-
-                if (!isset($_SESSION['customer_email'])) {
-                  echo "<a href='checkout.php'>Login</a>";
-
-                } else {
-
-                  echo "<a href='logout.php'>Logout</a>";
-
-                }
-
-                ?>
-              </li>
-            </ul>
-          </div>
-        </ul>
-
-
-
-      </nav>
-    </div>
-  </header>
-  <section class="content" id="content">
-    <div class="container">
-      <div class="col-md-12">
-        <ul class="breadcrumb">
-
-          <li><span>Cart</span></li>
-
-
-        </ul>
-
-      </div>
-    </div>
-  </section>
-
-
-  <div class="col-md-9" id="cart">
-    <div class="box">
-      <form action="cart.php" method="post" enctype="multipart-form-data">
-        <h1>Shopping Cart</h1>
-        <?php
-        $ip_add = getUserIp();
-        $select_cart = "select * from cart where ip_add='$ip_add'";
-        $run_cart = mysqli_query($con, $select_cart);
-        $count = mysqli_num_rows($run_cart);
-
-
-
-        ?>
-        <p class="text-muted">Currently you have <?php echo $count ?> items in your cart</p>
-        <div class="table-respon"></div>
-        <table class="table">
-          <thead>
-            <tr>
-              <th colspan="2">Product</th>
-              <th>Quantity</th>
-              <th>Unit Price</th>
-              <th>Size</th>
-              <th colspan="1">Delete</th>
-              <th colspan="1">Sub Total</th>
-            </tr>
-          </thead>
-          <tbody>
+<!-- ============================================
+CART PAGE CONTENT
+============================================ -->
+<section class="cart-wrapper">
+    <div class="cart-grid">
+        
+        <!-- Cart Items -->
+        <div class="cart-items-section">
+            <h2>🛒 Shopping Cart <span class="cart-count">(<?php echo item(); ?> items)</span></h2>
+            
             <?php
-            $total = 0;
-            while ($row = mysqli_fetch_array($run_cart)) {
-              $pro_id = $row['p_id'];
-              $pro_size = $row['size'];
-              $pro_qty = $row['qty'];
-              $get_product = "select * from products where product_id='$pro_id'";
-              $run_pro = mysqli_query($con, $get_product);
-              while ($row = mysqli_fetch_array($run_pro)) {
-                $p_title = $row['product_title'];
-                $p_img1 = $row['product_img1'];
-                $p_price = $row['product_price'];
-                $sub_total = $row['product_price'] * $pro_qty;
-                $total += $sub_total;
-
-
-
-                ?>
-                <tr>
-                  <td><img src="admin_area/product_images/<?php echo $p_img1 ?>"></td>
-                  <td><?php echo $p_title ?></td>
-                  <td><?php echo $pro_qty ?></td>
-                  <td>£ <?php echo $p_price ?></td>
-                  <td><?php echo $pro_size ?></td>
-                  <td><input type="checkbox" name="remove[]" value="<?php echo $pro_id ?>"></td>
-                  <td>£ <?php echo $sub_total ?></td>
-                </tr>
-              <?php }
-            } ?>
-            </tfoot>
-        </table>
-        <div class="box-footer">
-          <div class="pull-left">
-            <h4>Total Price</h4>
-          </div>
-          <div class="pull-right">
-            <h4>£ <?php echo $total; ?></h4>
-          </div>
+            $ip_add = getUserIp();
+            $select_cart = "SELECT c.*, p.product_title, p.product_img1, p.product_price 
+                            FROM cart c 
+                            JOIN products p ON c.p_id = p.product_id 
+                            WHERE c.ip_add='$ip_add'";
+            $run_cart = mysqli_query($con, $select_cart);
+            $count = mysqli_num_rows($run_cart);
+            
+            if($count > 0) {
+            ?>
+            
+            <form action="cart.php" method="post">
+                <table class="cart-table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Size</th>
+                            <th>Subtotal</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $total = 0;
+                        while($row_cart = mysqli_fetch_array($run_cart)) {
+                            $pro_id = $row_cart['p_id'];
+                            $pro_size = $row_cart['size'];
+                            $pro_qty = $row_cart['qty'];
+                            $p_title = $row_cart['product_title'];
+                            $p_img1 = $row_cart['product_img1'];
+                            $p_price = $row_cart['product_price'];
+                            $sub_total = $p_price * $pro_qty;
+                            $total += $sub_total;
+                        ?>
+                        <tr>
+                            <td>
+                                <div class="product-cell">
+                                    <img src="admin_area/product_images/<?php echo $p_img1; ?>" alt="<?php echo $p_title; ?>">
+                                    <span class="product-name">
+                                        <a href="details.php?pro_id=<?php echo $pro_id; ?>">
+                                            <?php echo $p_title; ?>
+                                        </a>
+                                    </span>
+                                </div>
+                            </td>
+                            <td class="price">£<?php echo number_format($p_price, 2); ?></td>
+                            <td>
+                                <input type="number" name="qty[<?php echo $pro_id; ?>]" 
+                                       value="<?php echo $pro_qty; ?>" 
+                                       min="1" max="10" 
+                                       class="qty-input">
+                            </td>
+                            <td>
+                                <span class="size-badge"><?php echo $pro_size ?: 'Standard'; ?></span>
+                            </td>
+                            <td class="subtotal">£<?php echo number_format($sub_total, 2); ?></td>
+                            <td>
+                                <button type="submit" name="remove" value="<?php echo $pro_id; ?>" 
+                                        class="remove-btn" title="Remove item">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <?php } ?>
+                    </tbody>
+                </table>
+                
+                <div class="cart-actions">
+                    <a href="index.php" class="btn btn-continue">
+                        <i class="fas fa-arrow-left"></i> Continue Shopping
+                    </a>
+                    <a href="checkout.php" class="btn btn-checkout">
+                        Proceed to Checkout <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </form>
+            
+            <?php 
+            } else { 
+            ?>
+            <div class="empty-cart">
+                <i class="fas fa-shopping-bag"></i>
+                <h3>Your cart is empty</h3>
+                <p>Looks like you haven't added any items yet.</p>
+                <a href="index.php" class="shop-btn">
+                    <i class="fas fa-store"></i> Start Shopping
+                </a>
+            </div>
+            <?php } ?>
         </div>
+        
+        <!-- Order Summary -->
+        <div class="order-summary">
+            <h3>📋 Order Summary</h3>
+            
+            <?php if($count > 0 && isset($total)) { ?>
+            <div class="summary-row">
+                <span class="label">Subtotal</span>
+                <span>£<?php echo number_format($total, 2); ?></span>
+            </div>
+            <div class="summary-row">
+                <span class="label">Shipping</span>
+                <span>£0.00</span>
+            </div>
+            <div class="summary-row">
+                <span class="label">Tax</span>
+                <span>£0.00</span>
+            </div>
+            <div class="summary-row total">
+                <span>Total</span>
+                <span>£<?php echo number_format($total, 2); ?></span>
+            </div>
+            <?php } else { ?>
+            <div style="text-align:center;padding:20px 0;">
+                <i class="fas fa-box" style="font-size:48px;color:#dee2e6;display:block;margin-bottom:15px;"></i>
+                <p style="color:#6c757d;">Add items to see summary</p>
+            </div>
+            <?php } ?>
+        </div>
+    </div>
+</section>
 
-
-        <div class="box-footer">
-          <div class="pull-left">
-            <a href="index.php" class="btn btn-default">
-              <i class="fa fa-chevron-left"></i>Continue Shopping
-            </a>
-          </div>
-          <div class="pull-right">
-            <button class="btn btn-default" type="submit" name="update" value="update cart">
-              <i class="fa fa-refresh">Update Cart</i>
-            </button>
-            <a href="checkout.php" class="btn btn-primary">
-              Processed to checkout<i class="fa fa-chevron-right"></i>
-            </a>
-          </div>
-        </div>
-      </form>
-    </div>
-
-    <?php
-
-    function update_cart()
-    {
-      global $con;
-      if (isset($_POST['update'])) {
-        foreach ($_POST['remove'] as $remove_id) {
-          $delete_product = "delete from cart where p_id='$remove_id'";
-          $run_del = mysqli_query($con, $delete_product);
-          if ($run_del) {
-            echo "<script>window.open('cart.php','_self')</script>";
-          }
-
-        }
-      }
-    }
-    echo @$up_cart = update_cart();
-    ?>
-
-  </div>
-  <div class="col-m-3">
-    <div class="box" id="order-summary">
-      <div class="box-header">
-        <h3>Order Summary</h3>
-      </div>
-      <p class="text-muted">
-        Shipping and additional costs are calculated based on the values you have entered
-      </p>
-      <div class="table-responsive">
-        <table class="table">
-          <tr>
-            <td>Order Sub Total</td>
-            <th>£ <?php echo $total ?></th>
-          </tr>
-          <tr>
-            <td>Shipping and handling</td>
-            <td>£ 0</td>
-          <tr>
-            <td>Tax</td>
-            <td>£ 0</td>
-          </tr>
-          <tr class="Total">
-            <td>Total</td>
-            <th>£ <?php echo $total ?></th>
-
-          </tr>
-          </tr>
-        </table>
-      </div>
-    </div>
-  </div>
-  <div id="row same-height-row">
-    <div class="col-md-3 col-sm-6">
-      <div class="box same-height headlin">
-        <h3 class="text-center">You also like these products</h3>
-      </div>
-    </div>
-    <div class="d-3">
-      <div class="product same-height">
-        <a href="">
-          <img src="website/all/lotion.svg" class="img-responsive">
-        </a>
-        <div class="tet">
-          <h3><a href="details.php">Nivea Lotion for men</a></h3>
-          <p class="price"><i class="fa fa-usd"></i>199</p>
-        </div>
-      </div>
-    </div>
-    <div class="d-3">
-      <div class="product same-height">
-        <a href="">
-          <img src="website/all/cre.svg" class="img-responsive">
-        </a>
-        <div class="tet">
-          <h3><a href="details.php">Shaving Cream</a></h3>
-          <p class="price"><i class="fa fa-usd"></i>99</p>
-        </div>
-      </div>
-    </div>
-    <div class="d-3">
-      <div class="product same-height">
-        <a href="">
-          <img src="website/all/comb.svg" class="img-responsive">
-        </a>
-        <div class="tet">
-          <h3><a href="details.php">Comb</a></h3>
-          <p class="price"><i class="fa fa-usd"></i>16</p>
-        </div>
-      </div>
-    </div>
-    <div class="d-3">
-      <div class="product same-height">
-        <a href="">
-          <img src="website/all/drayer.svg" class="img-responsive">
-        </a>
-        <div class="tet">
-          <h3><a href="details.php">Hair Dryer</a></h3>
-          <p class="price"><i class="fa fa-usd"></i>340</p>
-        </div>
-      </div>
-    </div>
-    <div class="d-3">
-      <div class="product same-height">
-        <a href="">
-          <img src="website/all/scissor.svg" class="img-responsive">
-        </a>
-        <div class="tet">
-          <h3><a href="details.php">Indian Scissor</a></h3>
-          <p class="price"><i class="fa fa-usd"></i>70</p>
-        </div>
-      </div>
-    </div>
-    <div class="d-3">
-      <div class="product same-height">
-        <a href="">
-          <img src="website/all/color.svg" class="img-responsive">
-        </a>
-        <div class="tet">
-          <h3><a href="details.php">Hair Color</a></h3>
-          <p class="price"><i class="fa fa-usd"></i>76</p>
-        </div>
-      </div>
-    </div>
-    <div class="d-3">
-      <div class="product same-height">
-        <a href="">
-          <img src="website/all/blad.svg" class="img-responsive">
-        </a>
-        <div class="tet">
-          <h3><a href="details.php">Blade</a></h3>
-          <p class="price"><i class="fa fa-usd"></i>85</p>
-        </div>
-      </div>
-    </div>
-    <div class="d-3">
-      <div class="product same-height">
-        <a href="">
-          <img src="website/all/napkin.svg" class="img-responsive">
-        </a>
-        <div class="tet">
-          <h3><a href="details.php">Napkin</a></h3>
-          <p class="price"><i class="fa fa-usd"></i>20</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- footer section starts  -->
-  <?php
-  include("includes/footer.php");
-  ?>
-  <!-- footer section   -->
+<?php include("includes/footer.php"); ?>

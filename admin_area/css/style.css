@@ -377,3 +377,68 @@ padding: .6rem;
     font-size: 1.3rem;
     padding:1rem 0;
 }
+/* ===== View Orders Page ===== */
+.label {
+    padding: 5px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+.label-warning {
+    background: #f0ad4e;
+    color: #fff;
+}
+.label-success {
+    background: #5cb85c;
+    color: #fff;
+}
+.label-danger {
+    background: #d9534f;
+    color: #fff;
+}
+.btn-danger {
+    background: #d9534f;
+    color: #fff;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+}
+.btn-danger:hover {
+    background: #c9302c;
+}
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+.table th {
+    background: #1b4353;
+    color: #fff;
+    padding: 12px 10px;
+    text-align: left;
+    font-size: 13px;
+}
+.table td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    font-size: 13px;
+}
+.table tr:hover {
+    background: #f5f5f5;
+}
+.table-responsive {
+    overflow-x: auto;
+}
+.page-header {
+    margin: 0 0 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #eee;
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a2e;
+}
