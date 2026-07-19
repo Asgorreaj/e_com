@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 07, 2026 at 01:11 PM
+-- Generation Time: Jul 14, 2026 at 05:14 PM
 -- Server version: 10.4.20-MariaDB
 -- PHP Version: 7.4.22
 
@@ -235,7 +235,9 @@ INSERT INTO `products` (`product_id`, `p_cat_id`, `cat_id`, `date`, `product_tit
 (26, 1, 2, '2026-06-23 15:09:35', 'Garniar Product', 'garnier-Black-Naturalpacket-natural-Black-1.0.png', 'kemi.jpg', 'f6330a00-2dda-4c44-94d4-bfbf641d11a4.35a8aef2cceee4b1f480adc7148ba7a5.jpeg', 544, 'fg', 'new arrival  lllllllllllll'),
 (32, 10, 8, '2021-06-18 00:15:41', 'Stylish Comb', 'comb-11.jpg', 'com.jpg', 'th (1).jpg', 543, '', 'new arrival'),
 (38, 21, 7, '2021-06-18 00:10:01', 'Philips trimmer for men', 'trimer1.jpg', 'trimer2.jpg', 'trimer3.jpg', 1495, '', 're'),
-(39, 22, 7, '2026-07-01 09:19:21', 'Boys Trimmer', 'Screenshot 2026-07-01 151711.png', 'Screenshot 2026-07-01 151711.png', 'Screenshot 2026-07-01 151711.png', 300, 'The VGR V-733 6-in-1 Lady Care Grooming Set is a premium all-in-one beauty and personal care device designed for women who want salon-quality grooming at home. Whether you need to remove body hair, trim facial hair, shave sensitive areas, cleanse your skin, smooth rough feet, or enjoy a relaxing facial massage, the VGR V-733 delivers fast, safe, and effective results.\r\n\r\nEquipped with 6 interchangeable attachments, a 600mAh rechargeable lithium battery, IPX7 waterproof protection, 2 adjustable speed modes, and a digital LED display, this cordless grooming kit is perfect for both wet and dry use. Its compact, lightweight design also makes it an excellent travel companion.\r\n\r\nIf you’re looking for the best lady shaver, epilator, and facial cleansing brush in Bangladesh, the VGR V-733 offers exceptional value with multiple beauty functions in one device.', 'trimmer');
+(39, 22, 7, '2026-07-01 09:19:21', 'Boys Trimmer', 'Screenshot 2026-07-01 151711.png', 'Screenshot 2026-07-01 151711.png', 'Screenshot 2026-07-01 151711.png', 300, 'The VGR V-733 6-in-1 Lady Care Grooming Set is a premium all-in-one beauty and personal care device designed for women who want salon-quality grooming at home. Whether you need to remove body hair, trim facial hair, shave sensitive areas, cleanse your skin, smooth rough feet, or enjoy a relaxing facial massage, the VGR V-733 delivers fast, safe, and effective results.\r\n\r\nEquipped with 6 interchangeable attachments, a 600mAh rechargeable lithium battery, IPX7 waterproof protection, 2 adjustable speed modes, and a digital LED display, this cordless grooming kit is perfect for both wet and dry use. Its compact, lightweight design also makes it an excellent travel companion.\r\n\r\nIf you’re looking for the best lady shaver, epilator, and facial cleansing brush in Bangladesh, the VGR V-733 offers exceptional value with multiple beauty functions in one device.', 'trimmer'),
+(40, 65, 10, '2026-07-14 12:26:33', 'Fruit', 'Screenshot 2026-07-14 182548.png', 'Screenshot 2026-07-14 182548.png', 'Screenshot 2026-07-14 182548.png', 300, 'Fruits', 'Fruits'),
+(41, 45, 10, '2026-07-14 12:29:48', 'Lipstick', 'Screenshot 2026-07-14 182758.png', 'Screenshot 2026-07-14 182758.png', 'Screenshot 2026-07-14 182758.png', 300, 'Lipstick', 'Lipstick');
 
 -- --------------------------------------------------------
 
@@ -425,7 +427,7 @@ ALTER TABLE `payments`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `product_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `product_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `product_category`

@@ -1,0 +1,5 @@
+/* new */
+.pull-left {
+    float: left;
+    display: flex !important;
+}

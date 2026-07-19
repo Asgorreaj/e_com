@@ -320,7 +320,9 @@ function showSlides(n) {
         </select>
       </div>
     </div>
-    <p class="price"><i class="fa fa-usd"></i><?php echo $p_price; ?></p>
+    <p class="price">
+      <!-- <i class="fa fa-usd"></i> -->
+    £<?php echo $p_price; ?></p>
     <p class="text-center buttons">
       <button class="btn-prim" type="submit"><i class=" fa fa-shopping-cart">Add to cart</i></button>
     </p>
