@@ -1,410 +1,703 @@
 <?php
 session_start();
 include("includes/db.php");
-
 include("functions/functions.php");
-  ?>
-<?php include("header.php"); ?> 
+?>
+<?php include("header.php"); ?>
 
 <?php
-
 if(isset($_GET['pro_id'])){
-  $pro_id=$_GET['pro_id'];
-  $get_product="select * from products where product_id='$pro_id'";
-  $run_product=mysqli_query($con,$get_product);
-  $row_product=mysqli_fetch_array($run_product);
-  $p_cat_id=$row_product['p_cat_id'];
-  $p_title=$row_product['product_title'];
-  $p_price=$row_product['product_price'];
-  $p_desc=$row_product['product_desc'];
-  $p_img1=$row_product['product_img1'];
-  $p_img2=$row_product['product_img2'];
-  $p_img3=$row_product['product_img3'];
-  $get_p_cat="select * from product_category where p_cat_id='$p_cat_id'";
-  $run_p_cat=mysqli_query($con,$get_p_cat);
-  $row_p_cat=mysqli_fetch_array($run_p_cat);
-  // $p_cat_id=$row_p_cat['p_cat_id'];
-  // $p_cat_title=$row_p_cat['p_cat_title'];
+    $pro_id = $_GET['pro_id'];
+    $get_product = "SELECT * FROM products WHERE product_id='$pro_id'";
+    $run_product = mysqli_query($con, $get_product);
+    $row_product = mysqli_fetch_array($run_product);
+    
+    if($row_product){
+        $p_cat_id = $row_product['p_cat_id'];
+        $p_title = $row_product['product_title'];
+        $p_price = $row_product['product_price'];
+        $p_desc = $row_product['product_desc'];
+        $p_img1 = $row_product['product_img1'];
+        $p_img2 = $row_product['product_img2'];
+        $p_img3 = $row_product['product_img3'];
+        
+        // Get category name
+        $get_p_cat = "SELECT p_cat_title FROM product_category WHERE p_cat_id='$p_cat_id'";
+        $run_p_cat = mysqli_query($con, $get_p_cat);
+        $row_p_cat = mysqli_fetch_array($run_p_cat);
+        $p_cat_title = isset($row_p_cat['p_cat_title']) ? $row_p_cat['p_cat_title'] : 'Uncategorized';
+    }
+}
+?>
 
+<style>
+/* ============================================
+   PRODUCT DETAILS PAGE - MODERN DESIGN
+   ============================================ */
+.details-wrapper {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
 }
 
+/* Breadcrumb */
+.breadcrumb-custom {
+    background: #f8f9fa;
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
 
-  ?>
+.breadcrumb-custom a {
+    color: #ff523b;
+    text-decoration: none;
+}
 
+.breadcrumb-custom span {
+    color: #6c757d;
+}
 
+/* Product Grid */
+.product-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    background: #fff;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopixia - Multi Vendor Ecommerce Platform</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+/* Product Images */
+.product-images {
+    position: relative;
+}
 
-    <!-- owl carousel css file cdn link  -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+.main-image {
+    width: 100%;
+    aspect-ratio: 1/1;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #f8f9fa;
+    border: 1px solid #f0f0f0;
+}
 
-    <!-- font awesome cdn link  -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+.main-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
 
-    <!-- custom css file link  -->
-    <link rel="stylesheet" href="style.css">
-  <style>
+.main-image:hover img {
+    transform: scale(1.03);
+}
 
+.thumbnail-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 15px;
+}
 
-  </style>
- 
-</head>
-<body>
+.thumbnail-grid .thumb {
+    aspect-ratio: 1/1;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+}
 
-<!-- header section starts  -->
+.thumbnail-grid .thumb.active {
+    border-color: #ff523b;
+}
 
-<header>
+.thumbnail-grid .thumb:hover {
+    border-color: #ff523b;
+}
 
-<div class="header-1">
+.thumbnail-grid .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 
-    <a href="index.php" class="logo" > <img src="website/all/logo5.svg" alt="Logo image" class="hidden-xs">  </a>
-                               
-<div class="col-md-6 offer">
-    <a href="#" class="btn btn-sucess btn-sm">
-           <?php
+/* Product Info */
+.product-info h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 8px;
+}
 
-        if (!isset($_SESSION['customer_email'])){
-        echo "Welcome Guest";
-      }else{
-      echo "Welcome: " .$_SESSION['customer_email'] . "";
+.product-info .category {
+    color: #6c757d;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.product-info .category a {
+    color: #ff523b;
+    text-decoration: none;
+}
+
+.product-info .price {
+    font-size: 32px;
+    font-weight: 700;
+    color: #ff523b;
+    margin-bottom: 15px;
+}
+
+.product-info .price .original {
+    font-size: 20px;
+    color: #adb5bd;
+    text-decoration: line-through;
+    margin-left: 12px;
+    font-weight: 400;
+}
+
+.product-info .price .discount {
+    font-size: 16px;
+    background: #ff523b;
+    color: #fff;
+    padding: 2px 12px;
+    border-radius: 50px;
+    margin-left: 10px;
+    font-weight: 600;
+}
+
+.product-info .rating {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.product-info .rating .stars {
+    color: #fdcb6e;
+    font-size: 18px;
+}
+
+.product-info .rating .review-count {
+    color: #6c757d;
+    font-size: 14px;
+}
+
+.product-info .description {
+    color: #2d3436;
+    font-size: 15px;
+    line-height: 1.7;
+    margin-bottom: 25px;
+    padding: 15px 0;
+    border-top: 1px solid #f1f2f6;
+    border-bottom: 1px solid #f1f2f6;
+}
+
+/* Form */
+.product-info .form-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+
+.product-info .form-group label {
+    font-weight: 600;
+    color: #2d3436;
+    font-size: 14px;
+    min-width: 100px;
+}
+
+.product-info .form-group select {
+    padding: 10px 16px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 14px;
+    background: #f8f9fa;
+    color: #2d3436;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex: 1;
+    max-width: 200px;
+}
+
+.product-info .form-group select:focus {
+    border-color: #ff523b;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255,82,59,0.08);
+}
+
+/* Add to Cart Button */
+.add-to-cart-btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #ff523b, #ff6b5a);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.add-to-cart-btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 25px rgba(255,82,59,0.3);
+}
+
+.add-to-cart-btn i {
+    font-size: 20px;
+}
+
+/* Product Meta */
+.product-meta {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #f1f2f6;
+    flex-wrap: wrap;
+}
+
+.product-meta .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #6c757d;
+    font-size: 14px;
+}
+
+.product-meta .meta-item i {
+    color: #ff523b;
+}
+
+/* You May Also Like */
+.related-section {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 0 20px;
+}
+
+.related-section h3 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 25px;
+    padding-left: 10px;
+    position: relative;
+}
+
+.related-section h3::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 28px;
+    background: linear-gradient(135deg, #ff523b, #ff6b5a);
+    border-radius: 4px;
+}
+
+.related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+}
+
+.related-item {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    border: 1px solid #f0f0f0;
+    text-align: center;
+    padding: 15px;
+}
+
+.related-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.related-item img {
+    width: 100%;
+    height: 120px;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+.related-item h4 {
+    font-size: 13px;
+    font-weight: 600;
+    color: #2d3436;
+    margin-bottom: 5px;
+}
+
+.related-item h4 a {
+    color: #2d3436;
+    text-decoration: none;
+}
+
+.related-item h4 a:hover {
+    color: #ff523b;
+}
+
+.related-item .price {
+    font-weight: 700;
+    color: #ff523b;
+    font-size: 15px;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 992px) {
+    .product-details-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        padding: 20px;
     }
+    
+    .product-info h1 {
+        font-size: 24px;
+    }
+    
+    .product-info .price {
+        font-size: 28px;
+    }
+}
 
+@media (max-width: 768px) {
+    .details-wrapper {
+        padding: 0 15px;
+        margin: 20px auto;
+    }
+    
+    .product-details-grid {
+        padding: 15px;
+        border-radius: 12px;
+    }
+    
+    .product-info h1 {
+        font-size: 20px;
+    }
+    
+    .product-info .price {
+        font-size: 24px;
+    }
+    
+    .product-info .form-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .product-info .form-group label {
+        min-width: auto;
+    }
+    
+    .product-info .form-group select {
+        max-width: 100%;
+    }
+    
+    .add-to-cart-btn {
+        font-size: 16px;
+        padding: 14px;
+    }
+    
+    .related-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+    
+    .thumbnail-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+    
+    .product-meta {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
 
-        ?>
-    </a>
-<a id="pr" href="#"> Shopping Cart Total Price: £ <?php totalPrice(); ?>, Total Items <?php item(); ?></a>
-</div>
-  
-</div>
+@media (max-width: 480px) {
+    .product-details-grid {
+        padding: 12px;
+    }
+    
+    .product-info h1 {
+        font-size: 18px;
+    }
+    
+    .product-info .price {
+        font-size: 20px;
+    }
+    
+    .product-info .description {
+        font-size: 14px;
+    }
+    
+    .add-to-cart-btn {
+        font-size: 14px;
+        padding: 12px;
+    }
+    
+    .related-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    
+    .related-item {
+        padding: 10px;
+    }
+    
+    .related-item img {
+        height: 80px;
+    }
+    
+    .main-image {
+        aspect-ratio: 1/1;
+    }
+}
 
-<div class="header-2">
-   
+@media (max-width: 360px) {
+    .related-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+    
+    .related-item {
+        padding: 8px;
+    }
+    
+    .related-item h4 {
+        font-size: 11px;
+    }
+    
+    .related-item .price {
+        font-size: 13px;
+    }
+}
+</style>
 
-<nav class="navbar"> 
+<!-- ============================================
+BREADCRUMB
+============================================ -->
+<div class="details-wrapper">
+    <div class="breadcrumb-custom">
+        <a href="index.php">Home</a> / 
+        <a href="trimer.php">Shop</a> / 
+        <span><?php echo $p_title; ?></span>
+    </div>
 
-
-     <ul >
-       
-            <li><a  href="index.php">HOME</a></li>
-            <li><a class="active" href="trimer.php">SHOP</a></li>
-           
-            <li><a href="contactus.php">CONTACT</a></li>
+    <!-- ============================================
+    PRODUCT DETAILS
+    ============================================ -->
+    <div class="product-details-grid">
+        
+        <!-- Product Images -->
+        <div class="product-images">
+            <div class="main-image">
+                <img id="mainProductImage" src="admin_area/product_images/<?php echo $p_img1; ?>" alt="<?php echo $p_title; ?>">
+            </div>
+            <div class="thumbnail-grid">
+                <div class="thumb active" onclick="changeImage('admin_area/product_images/<?php echo $p_img1; ?>', this)">
+                    <img src="admin_area/product_images/<?php echo $p_img1; ?>" alt="Thumb 1">
+                </div>
+                <?php if(!empty($p_img2)): ?>
+                <div class="thumb" onclick="changeImage('admin_area/product_images/<?php echo $p_img2; ?>', this)">
+                    <img src="admin_area/product_images/<?php echo $p_img2; ?>" alt="Thumb 2">
+                </div>
+                <?php endif; ?>
+                <?php if(!empty($p_img3)): ?>
+                <div class="thumb" onclick="changeImage('admin_area/product_images/<?php echo $p_img3; ?>', this)">
+                    <img src="admin_area/product_images/<?php echo $p_img3; ?>" alt="Thumb 3">
+                </div>
+                <?php endif; ?>
+            </div>
+        </div>
+        
+        <!-- Product Info -->
+        <div class="product-info">
+            <div class="category">
+                Category: <a href="trimer.php?p_cat=<?php echo $p_cat_id; ?>"><?php echo $p_cat_title; ?></a>
+            </div>
             
- 
-       <div class="col-md-6">
-        <ul class="menu">
-            <li>
-                         <div class="collapse clearfix" id="search">
-                             <form class="navbar-form" method="get" action="result.php">
-                                 <div class="input-group">
-                                     <input type="text" name="user_query" placeholder="search" class="form-control" required="">
-                                     <button type="submit" value="search" name="search" class="btn btn-primary">
-                                         <i class="fa fa-search"></i>
-                                     </button>
-                                 </div>
-                             </form>
-                         </div>
-                   </li>
-
-
-
-                <!-- <li>
-                  <a href="cart.php" class="">
-                    <i class="fa fa-shopping-cart"></i>
-                      <span><?php item(); ?> items in cart</span>
-                        </a>
-                </li>
-                   
-
-                   <li>
-                   <a  href="customer_registration.php"><i class="fa fa-user-plus"></i>Register</a></li>
-                   <li>
-                   <a href="customer/my_account.php"><i class="fa fa-user-circle"></i>My Account</a></li> 
-                     
-                   <li>
-                   <a href="cart.php"><i class="fa fa-shopping-cart"></i>Goto Cart</a></li>
-                    
-                   <li>
-                     <?php
-
-                    if (!isset($_SESSION['customer_email'])){
-                    echo "<a href='checkout.php'>Login</a>";
-
-                         } else{
-                    
-                    echo "<a href='logout.php'>Logout</a>";
+            <h1><?php echo $p_title; ?></h1>
+            
+            <div class="rating">
+                <span class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </span>
+                <span class="review-count">(24 reviews)</span>
+            </div>
+            
+            <div class="price">
+                £<?php echo number_format($p_price, 2); ?>
+                <span class="original">£<?php echo number_format($p_price * 1.2, 2); ?></span>
+                <span class="discount">-20%</span>
+            </div>
+            
+            <div class="description">
+                <?php echo nl2br($p_desc); ?>
+            </div>
+            
+            <?php addCart(); ?>
+            
+            <form action="details.php?add_cart=<?php echo $pro_id; ?>" method="post">
+                <div class="form-group">
+                    <label>Quantity:</label>
+                    <select name="product_qty">
+                        <?php for($i = 1; $i <= 10; $i++): ?>
+                            <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                        <?php endfor; ?>
+                    </select>
+                </div>
                 
-                         }
-
-                    ?></li> -->
-             </ul>
-       </div>
-</ul>
-
-
-
-</nav></div></header>
-<!-- header section End  -->
-
-<section class="content" id="content">
-  <div class="container">
-    <div class="col-md-12">
-      <ul class="breadcrumb">
-     
-        <li><span>Product Details</span></li>
-
-
-          </ul>
-
-           </div></div></section>  
-      
-    
-
-   
-
-    
-  
-  <div class="content1" id="content1">
-  <div class="container1">
-    <div class="col-md-3">
-      <?php
-      include("includes/sidebar.php");  
-      ?>
-   
+                <div class="form-group">
+                    <label>Color / Size:</label>
+                    <select name="product_size">
+                        <option value="RED & Blue">RED & Blue</option>
+                        <option value="Khaki">Khaki</option>
+                        <option value="White">White</option>
+                        <option value="Gray">Gray</option>
+                        <option value="Blue">Blue</option>
+                        <option value="Black">Black</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="add-to-cart-btn">
+                    <i class="fas fa-shopping-bag"></i> Add to Cart
+                </button>
+            </form>
+            
+            <div class="product-meta">
+                <div class="meta-item">
+                    <i class="fas fa-tag"></i> SKU: #PROD-<?php echo str_pad($pro_id, 5, '0', STR_PAD_LEFT); ?>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-box"></i> In Stock
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-truck"></i> Free Shipping
+                </div>
+            </div>
+        </div>
     </div>
+</div>
+
+<!-- ============================================
+YOU MAY ALSO LIKE
+============================================ -->
+<section class="related-section">
+    <h3>🔥 You May Also Like</h3>
+    <div class="related-grid">
+        <?php
+        $get_related = "SELECT * FROM products WHERE p_cat_id='$p_cat_id' AND product_id != '$pro_id' ORDER BY RAND() LIMIT 6";
+        $run_related = mysqli_query($con, $get_related);
+        
+        if(mysqli_num_rows($run_related) > 0) {
+            while($row = mysqli_fetch_array($run_related)) {
+                $r_id = $row['product_id'];
+                $r_title = $row['product_title'];
+                $r_price = $row['product_price'];
+                $r_img1 = $row['product_img1'];
+        ?>
+        <div class="related-item">
+            <a href="details.php?pro_id=<?php echo $r_id; ?>">
+                <img src="admin_area/product_images/<?php echo $r_img1; ?>" alt="<?php echo $r_title; ?>">
+            </a>
+            <h4>
+                <a href="details.php?pro_id=<?php echo $r_id; ?>">
+                    <?php echo substr($r_title, 0, 20) . (strlen($r_title) > 20 ? '...' : ''); ?>
+                </a>
+            </h4>
+            <div class="price">£<?php echo number_format($r_price, 2); ?></div>
+        </div>
+        <?php 
+            }
+        } else {
+        ?>
+        <div style="grid-column:1/-1;text-align:center;padding:30px;color:#6c757d;">
+            <i class="fas fa-box-open" style="font-size:32px;display:block;margin-bottom:10px;color:#dee2e6;"></i>
+            <p>No related products found</p>
+        </div>
+        <?php } ?>
     </div>
-     </div>
-<div class="slides">
+</section>
 
-<div class="mySlides fade">
-  <div class="numbertt"></div>
-  <img src="admin_area/product_images/<?php echo $p_img1 ?>" width="500" height="500">
-  
-</div>
+<?php include("includes/footer.php"); ?>
 
-<div class="mySlides fade">
-  <div class="numbertt"></div>
-  <img src="admin_area/product_images/<?php echo $p_img2 ?>" width="500" height="500">
-  
-</div>
-
-<div class="mySlides fade">
-  <div class="numbertt"></div>
-  <img src="admin_area/product_images/<?php echo $p_img3 ?>" width="500" height="500">
-
-</div>
-
-<a class="prv" onclick="plusSlides(-1)">&#10094;</a>
-<a class="net" onclick="plusSlides(1)">&#10095;</a>
-
-</div>
-
-
-
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-<!-- owl carousel js file cdn link  -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-
-<!-- custom js file link  -->
-<script src="js/main.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>  
 <script>
-var slideIndex = 1;
+// ============================================
+// CHANGE MAIN IMAGE ON THUMBNAIL CLICK
+// ============================================
+function changeImage(src, element) {
+    document.getElementById('mainProductImage').src = src;
+    
+    // Remove active class from all thumbs
+    document.querySelectorAll('.thumbnail-grid .thumb').forEach(function(thumb) {
+        thumb.classList.remove('active');
+    });
+    
+    // Add active class to clicked thumb
+    element.classList.add('active');
+}
+
+// ============================================
+// AUTO SLIDE FOR IMAGES
+// ============================================
+let slideIndex = 1;
 showSlides(slideIndex);
 
 function plusSlides(n) {
-  showSlides(slideIndex += n);
+    showSlides(slideIndex += n);
 }
 
 function currentSlide(n) {
-  showSlides(slideIndex = n);
+    showSlides(slideIndex = n);
 }
 
 function showSlides(n) {
-  var i;
-  var slides = document.getElementsByClassName("mySlides");
-  var dots = document.getElementsByClassName("dot");
-  if (n > slides.length) {slideIndex = 1}    
-  if (n < 1) {slideIndex = slides.length}
-  for (i = 0; i < slides.length; i++) {
-      slides[i].style.display = "none";  
-  }
-  for (i = 0; i < dots.length; i++) {
-      dots[i].className = dots[i].className.replace(" active", "");
-  }
-  slides[slideIndex-1].style.display = "block";  
-  dots[slideIndex-1].className += " active";
+    let slides = document.getElementsByClassName("mySlides");
+    let dots = document.getElementsByClassName("dot");
+    
+    if (slides.length > 0) {
+        if (n > slides.length) { slideIndex = 1; }
+        if (n < 1) { slideIndex = slides.length; }
+        
+        for (let i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        
+        for (let i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active", "");
+        }
+        
+        if (slides[slideIndex - 1]) {
+            slides[slideIndex - 1].style.display = "block";
+        }
+        
+        if (dots[slideIndex - 1]) {
+            dots[slideIndex - 1].className += " active";
+        }
+    }
 }
 </script>
-
-<!--<div class="col-md-9">
-  <div class="row" id="productmain">
-    <div class="col-sm-6">
-      <div id="mainimage">
-        <div id="mycarousel" class="carousel slide" data-ride="carousel">
-          <ol class="carousel-indicators">
-            <li data-target="mycarousel" data-slide-to="0" class="active"></li>
-            <li data-target="mycarousel" data-slide-to="1"></li>
-            <li data-target="mycarousel" data-slide-to="2"></li>
-            
-          </ol>
-          <div class="carousel-inner">
-            <div class="item active">
-              <center>
-                <img src="website/all/lotion.svg" class="img-responsive">
-              </center>
-            </div>
-            <div class="item">
-              <center>
-                <img src="website/all/lotion.svg" class="img-responsive">
-              </center>
-            </div>
-            <div class="item">
-              <center>
-                <img src="website/all/lotion.svg" class="img-responsive">
-              </center>
-            </div>
-          </div>
-          <a href="mycarousel" class="left carousel-control" data-slide="prev">
-            <span class="glyphicon glyphicon-chevron-left"></span>
-            <span class="sr-only">Previous</span>
-          </a>
-           <a href="mycarousel" class="right carousel-control" data-slide="next">
-            <span class="glyphicon glyphicon-chevron-right"></span>
-            <span class="sr-only">Next</span>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>-->
-
-<div class="co-md-6">
-  <div class="bx">
-    <h1 class="text-center"><?php echo $p_title ?></h1>
-   <?php addCart(); ?>
-   
-    <form action="details.php?add_cart=<?php echo $pro_id ?>" method="post" class="form-horizontal">
-      <div class="form-group">
-        <label class="col-md-5 control-label" >Product Quantity</label>
-        <div class="col-md-7">
-          <select name="product_qty" class="form-control">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-          </select>
-        </div>
-      </div>
-  
-    <div class="form-group">
-      <label class="col-md-5 control-label" >Chose Color</label>
-      <div class="col-md-7">
-        <select name="product_size" class="form-control">
-          <option>RED & Blue</option>
-           <option>khaki</option>
-            <option>white</option>
-             <option>gray</option>
-              <option>blue</option>
-        </select>
-      </div>
-    </div>
-    <p class="price">
-      <!-- <i class="fa fa-usd"></i> -->
-    £<?php echo $p_price; ?></p>
-    <p class="text-center buttons">
-      <button class="btn-prim" type="submit"><i class=" fa fa-shopping-cart">Add to cart</i></button>
-    </p>
-  </form>
-  </div>
-  <div class="col-xs-4">
-    <a href="#" class="thumb">
-      <img src="" class="img-responsive" >
-    </a>
-  </div>
-  <div class="col-xs-4">
-    <a href="#" class="thumb">
-      <img src="" class="img-responsive" >
-    </a>
-  </div>
-  <div class="col-xs-4">
-    <a href="#" class="thumb">
-      <img src="" class="img-responsive" >
-    </a>
-  </div>
-</div>
-<div class="boxa" id="details">
-  <h4>Product details</h4>
-  <p><?php echo $p_desc ?></p>
-  <h4>Colors</h4>
-  <ul>
-    <li>Red</li>
-     <li>Blue</li>
-      <li>Green</li>
-       <li>White</li>
-        
-  </ul>
-</div>
-
-<!--
-<div id="row same-height-row">
-  <div class="col-md-3 col-sm-6">
-    <div class="box same-height headline">
-      <h3 class="text-center">You also like these products</h3>
-    </div>
-  </div>
-  
-  <?php
-$get_product="select * from products order by 1 LIMIT 0,5";
-$run_product=mysqli_query($con,$get_product);
-while ($row=mysqli_fetch_array($run_product)) {
-
-  $pro_id=$row['product_id'];
-  $product_title=$row['product_title'];
-   $product_price=$row['product_price'];
-    $product_img1=$row['product_img1'];
-
-    echo "
-    <div class='d-3'>
-    <div class='product same-height'>
-    <a href='details.php?pro_id=$pro_id'>
-    <img src='admin_area/product_images/$product_img1' class='img-responsive' width='150' >
-
-    </a>
-    <div class='tet'>
-    <h3> <a href='details.php?pro_id=$pro_id'>$product_title</a> </h3>
-    <p class='price'>$product_price </p>
-
-    </div>
-    </div>
-    </div>
-
-
-
-    ";
-
-}
-
-    ?>
--->
-</div>
-
-
-     <!-- footer section starts  -->
-   <?php
-      include("includes/footer.php");  
-      ?>
-<!-- footer section   -->
-
-</body></html>
+</body>
+</html>

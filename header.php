@@ -1,5 +1,5 @@
 <?php
-// session_start চেক
+// Session check
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -12,7 +12,7 @@ if (!function_exists('getUserIp')) {
     include("includes/db.php");
 }
 
-// বর্তমান ফোল্ডার পাথ ডিটেক্ট করুন
+// Current folder path detection
 $current_path = dirname($_SERVER['PHP_SELF']);
 $base_path = str_repeat('../', substr_count($current_path, '/') - 1);
 ?>
@@ -22,15 +22,135 @@ $base_path = str_repeat('../', substr_count($current_path, '/') - 1);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shopixia - Multi Vendor Ecommerce Platform</title>
+    
+    <!-- External Libraries -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
     <link rel="stylesheet" href="<?php echo $base_path; ?>style.css">
+
     <style>
         /* ===== NAVBAR STYLES ===== */
+        .header-1 {
+            background: linear-gradient(135deg, #1b4353 0%, #2a6a80 100%);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            border-bottom: 3px solid #ff523b;
+        }
+
+        .header-1 .logo img {
+            width: 160px;
+            height: auto;
+        }
+
+        .header-1 .offer {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .header-1 .offer a {
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .header-1 .offer a:hover {
+            color: #ff523b;
+        }
+
+        .header-1 .offer .btn-sm {
+            background: rgba(255,255,255,0.12);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-weight: 500;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .header-1 .offer .btn-sm:hover {
+            background: #ff523b;
+            border-color: #ff523b;
+        }
+
+        .header-1 .offer #pr {
+            color: #fdcb6e;
+            font-weight: 600;
+            background: rgba(253,203,110,0.12);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 13px;
+        }
+
+        .header-1 .offer #pr:hover {
+            background: rgba(253,203,110,0.25);
+            color: #fff;
+        }
+
+        /* ----- E-commerce Info Bar ----- */
+        .ecom-info-bar {
+            background: #0d2b38;
+            padding: 6px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-size: 12px;
+            color: rgba(255,255,255,0.7);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .ecom-info-bar .info-items {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .ecom-info-bar .info-items span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .ecom-info-bar .info-items i {
+            color: #fdcb6e;
+            font-size: 13px;
+        }
+
+        .ecom-info-bar .info-items .highlight {
+            color: #ff523b;
+            font-weight: 600;
+        }
+
+        .ecom-info-bar .social-icons {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .ecom-info-bar .social-icons a {
+            color: rgba(255,255,255,0.5);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .ecom-info-bar .social-icons a:hover {
+            color: #fdcb6e;
+            transform: translateY(-2px);
+        }
+
+        /* ----- Header-2 (Main Navbar) ----- */
         .header-2 {
             background-color: #1b4353 !important;
-            padding: 10px 20px !important;
+            padding: 0 20px !important;
             position: sticky;
             top: 0;
             z-index: 20000;
@@ -77,7 +197,9 @@ $base_path = str_repeat('../', substr_count($current_path, '/') - 1);
             border-radius: 4px !important;
         }
 
-        ul.spx-main-menu li ul.spx-dropdown {
+        /* Dropdown */
+        /* Level 1: SHOP dropdown */
+        ul.spx-main-menu > li > ul.spx-dropdown {
             display: none !important;
             position: absolute !important;
             top: 100% !important;
@@ -93,8 +215,42 @@ $base_path = str_repeat('../', substr_count($current_path, '/') - 1);
             border-radius: 0 0 4px 4px !important;
         }
 
-        ul.spx-main-menu li:hover ul.spx-dropdown {
+        ul.spx-main-menu > li:hover > ul.spx-dropdown {
             display: block !important;
+        }
+
+        /* Level 2: MAN/WOMAN sub-dropdown — flies out to the RIGHT */
+        ul.spx-main-menu > li > ul.spx-dropdown > li {
+            position: relative !important;
+        }
+
+        /* Hide ALL nested dropdowns by default */
+        ul.spx-main-menu > li > ul.spx-dropdown > li > ul.spx-dropdown {
+            display: none !important;
+            position: absolute !important;
+            top: 0 !important;
+            left: 100% !important;
+            background-color: #ffffff !important;
+            min-width: 200px !important;
+            list-style: none !important;
+            padding: 10px 0 !important;
+            margin: 0 !important;
+            box-shadow: 4px 8px 16px rgba(0,0,0,0.2) !important;
+            z-index: 100000 !important;
+            border-top: 3px solid #ff523b !important;
+            border-radius: 0 4px 4px 0 !important;
+        }
+
+        /* Show ONLY on hover of that specific li */
+        ul.spx-main-menu > li > ul.spx-dropdown > li:hover > ul.spx-dropdown {
+            display: block !important;
+        }
+
+        /* MAN link style */
+        ul.spx-main-menu > li > ul.spx-dropdown > li > a {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
         }
 
         ul.spx-main-menu li ul.spx-dropdown li a {
@@ -142,42 +298,6 @@ $base_path = str_repeat('../', substr_count($current_path, '/') - 1);
             margin-right: 5px;
         }
 
-        .header-1 {
-            background: url(<?php echo $base_path; ?>website/all/back.jpg) no-repeat;
-            background-blend-mode: multiply;
-            background-size: cover;
-            background-position: center;
-            padding: 20px 10px;
-            text-align: center;
-        }
-
-        header .header-1 {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 15px;
-            width: 100%;
-            z-index: 10;
-        }
-
-        header .header-1 .logo img {
-            width: 20rem;
-        }
-
-        .col-md-6.offer {
-            color: #fff;
-        }
-
-        .col-md-6.offer a {
-            color: #fff;
-            text-decoration: none;
-        }
-
-        #pr {
-            color: #ff523b !important;
-            font-weight: bold;
-        }
-
         /* Search Box */
         .navbar-form .input-group {
             display: flex;
@@ -200,10 +320,6 @@ $base_path = str_repeat('../', substr_count($current_path, '/') - 1);
             padding: 7px 12px;
             border-radius: 0 4px 4px 0;
             cursor: pointer;
-        }
-
-        .navbar-form .btn-primary:hover {
-            background: #e0452f;
         }
 
         /* ===== CART SIDEBAR ===== */
@@ -380,27 +496,102 @@ $base_path = str_repeat('../', substr_count($current_path, '/') - 1);
             background: #ff523b;
         }
 
+        /* Responsive */
         @media (max-width: 992px) {
-            ul.spx-main-menu { flex-wrap: wrap !important; }
-            .spx-right-menu { margin-left: 0 !important; width: 100% !important; }
-            .spx-right-menu ul.menu-items { flex-wrap: wrap !important; justify-content: center !important; }
-            ul.spx-main-menu > li > a { padding: 8px 10px !important; font-size: 12px !important; }
-            .navbar-form .form-control { width: 100px !important; }
-            header .header-1 { flex-direction: column !important; }
-            header .header-1 .logo img { width: 15rem !important; }
-            .cart-sidebar { width: 380px; right: -380px; }
+            .header-1 {
+                flex-direction: column;
+                text-align: center;
+                padding: 15px;
+            }
+            .header-1 .offer {
+                justify-content: center;
+            }
+            .ecom-info-bar {
+                flex-direction: column;
+                text-align: center;
+                padding: 8px 15px;
+            }
+            .ecom-info-bar .info-items {
+                justify-content: center;
+            }
+            ul.spx-main-menu {
+                flex-wrap: wrap !important;
+            }
+            .spx-right-menu {
+                margin-left: 0 !important;
+                width: 100% !important;
+            }
+            .spx-right-menu ul.menu-items {
+                flex-wrap: wrap !important;
+                justify-content: center !important;
+            }
+            ul.spx-main-menu > li > a {
+                padding: 8px 10px !important;
+                font-size: 12px !important;
+            }
+            .navbar-form .form-control {
+                width: 100px !important;
+            }
+            .cart-sidebar {
+                width: 380px;
+                right: -380px;
+            }
         }
 
         @media (max-width: 768px) {
-            ul.spx-main-menu { flex-direction: column !important; align-items: stretch !important; }
-            ul.spx-main-menu > li { display: block !important; }
-            ul.spx-main-menu > li > a { text-align: center !important; }
-            .spx-right-menu ul.menu-items { flex-direction: column !important; align-items: stretch !important; }
-            .spx-right-menu ul.menu-items li { display: block !important; text-align: center !important; }
-            .navbar-form .input-group { justify-content: center !important; }
-            .navbar-form .form-control { width: 80% !important; }
-            ul.spx-main-menu li ul.spx-dropdown { position: static !important; width: 100% !important; }
-            .cart-sidebar { width: 100% !important; right: -100% !important; }
+            .header-1 .logo img {
+                width: 120px;
+            }
+            .header-1 .offer {
+                font-size: 12px;
+                gap: 8px;
+            }
+            .header-1 .offer #pr {
+                font-size: 11px;
+                padding: 4px 12px;
+            }
+            .header-1 .offer .btn-sm {
+                font-size: 12px;
+                padding: 4px 12px;
+            }
+            .ecom-info-bar {
+                font-size: 11px;
+            }
+            .ecom-info-bar .info-items {
+                gap: 12px;
+            }
+            ul.spx-main-menu {
+                flex-direction: column !important;
+                align-items: stretch !important;
+            }
+            ul.spx-main-menu > li {
+                display: block !important;
+            }
+            ul.spx-main-menu > li > a {
+                text-align: center !important;
+            }
+            .spx-right-menu ul.menu-items {
+                flex-direction: column !important;
+                align-items: stretch !important;
+            }
+            .spx-right-menu ul.menu-items li {
+                display: block !important;
+                text-align: center !important;
+            }
+            .navbar-form .input-group {
+                justify-content: center !important;
+            }
+            .navbar-form .form-control {
+                width: 80% !important;
+            }
+            ul.spx-main-menu li ul.spx-dropdown {
+                position: static !important;
+                width: 100% !important;
+            }
+            .cart-sidebar {
+                width: 100% !important;
+                right: -100% !important;
+            }
         }
     </style>
 </head>
@@ -425,74 +616,112 @@ $base_path = str_repeat('../', substr_count($current_path, '/') - 1);
 <!-- ===== NOTIFICATION ===== -->
 <div class="cart-success-notification" id="cartNotification"></div>
 
-<!-- ===== HEADER ===== -->
+<!-- ============================================
+HEADER - START
+============================================ -->
+
+<!-- ===== E-COMMERCE INFO BAR ===== -->
+<div class="ecom-info-bar">
+    <div class="info-items">
+        <span><i class="fas fa-truck"></i> Free Shipping on orders over £50</span>
+        <span><i class="fas fa-undo"></i> 30 Days Easy Returns</span>
+        <span><i class="fas fa-headset"></i> 24/7 Customer Support</span>
+        <span><i class="fas fa-lock"></i> <span class="highlight">100% Secure</span> Payment</span>
+    </div>
+    <div class="social-icons">
+        <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+    </div>
+</div>
+
+<!-- ===== HEADER 1 (Logo + Welcome + Cart Info) ===== -->
 <header>
     <div class="header-1">
         <a href="<?php echo $base_path; ?>index.php" class="logo"> 
-            <img src="<?php echo $base_path; ?>website/all/logo5.svg" alt="Logo image" class="hidden-xs"> 
+            <img src="<?php echo $base_path; ?>website/all/logo5.svg" alt="Shopixia Logo"> 
         </a>                     
-        <div class="col-md-6 offer">
-            <a href="#" class="btn btn-sucess btn-sm">
+        <div class="offer">
+            <a href="#" class="btn-sm">
                 <?php
                 if (!isset($_SESSION['customer_email'])){
-                    echo "Welcome Guest";
+                    echo '<i class="fas fa-user"></i> Welcome Guest';
                 } else {
-                    echo "Welcome: " . $_SESSION['customer_email'];
+                    echo '<i class="fas fa-user-check"></i> Welcome: ' . $_SESSION['customer_email'];
                 }
                 ?>
             </a>
-            <a id="pr" href="#"> Shopping Cart Total Price: £ <?php totalPrice(); ?>, Total Items <?php item(); ?></a>
+            <a id="pr" href="#">
+                <i class="fas fa-shopping-bag"></i> Total: £<?php totalPrice(); ?> (<?php item(); ?> items)
+            </a>
         </div>
     </div>
 
+    <!-- ===== HEADER 2 (Main Navbar) ===== -->
     <div class="header-2">
         <nav class="spx-nav-container"> 
             <ul class="spx-main-menu">
-                <li><a href="<?php echo $base_path; ?>index.php">HOME</a></li> 
-                
-                <?php 
-                $get_cats = "SELECT * FROM categories";
-                $run_cats = mysqli_query($con, $get_cats);
-                while($row_cats = mysqli_fetch_array($run_cats)){
-                    $cat_id = $row_cats['cat_id'];
-                    $cat_title = $row_cats['cat_title'];
-                    
-                    $get_sub_cats = "SELECT * FROM product_category WHERE cat_id='$cat_id'";
-                    $run_sub_cats = mysqli_query($con, $get_sub_cats);
-                    $count_sub_cats = mysqli_num_rows($run_sub_cats);
-                    
-                    if($count_sub_cats > 0){
-                        echo "
-                        <li>
-                            <a href='#'>$cat_title <i class='fa fa-caret-down'></i></a>
-                            <ul class='spx-dropdown'>
-                        ";
-                        while($row_sub_cats = mysqli_fetch_array($run_sub_cats)){
-                            $p_cat_id = $row_sub_cats['p_cat_id'];
-                            $p_cat_title = $row_sub_cats['p_cat_title'];
-                            echo "<li><a href='".$base_path."trimer.php?p_cat=$p_cat_id'>$p_cat_title</a></li>";
-                        }
-                        echo "
+                <li><a href="<?php echo $base_path; ?>index.php">HOME</a></li>
+
+                <!-- SHOP: MAN | WOMAN dropdown -->
+                <li>
+                    <a href="#">SHOP <i class="fa fa-caret-down"></i></a>
+                    <ul class="spx-dropdown">
+
+                        <li style="position:relative;">
+                            <a href="<?php echo $base_path; ?>trimer.php?cat=7" style="font-weight:700;">
+                                <i class="fas fa-male" style="margin-right:6px;color:#ff523b;"></i> MAN
+                                <i class="fa fa-caret-right" style="float:right;margin-top:3px;font-size:11px;"></i>
+                            </a>
+                            <ul class="spx-dropdown" style="left:100%;top:0;min-width:180px;">
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=22">Trimmer</a></li>
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=23">Hair Dryer</a></li>
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=24">Straightener</a></li>
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=26">Shaving Cream</a></li>
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=27">Blade</a></li>
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=32">Classic Shaver</a></li>
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=56">Wallet</a></li>
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=57">Belt</a></li>
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=46">Inner Wear</a></li>
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=48">Cap</a></li>
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=49">Hankey</a></li>
                             </ul>
                         </li>
-                        ";
-                    } else {
-                        echo "<li><a href='".$base_path."trimer.php?cat=$cat_id'>$cat_title</a></li>";
-                    }
-                }
-                ?>
+
+                        <li style="position:relative;">
+                            <a href="<?php echo $base_path; ?>trimer.php?cat=8" style="font-weight:700;">
+                                <i class="fas fa-female" style="margin-right:6px;color:#ff523b;"></i> WOMAN
+                                <i class="fa fa-caret-right" style="float:right;margin-top:3px;font-size:11px;"></i>
+                            </a>
+                            <ul class="spx-dropdown" style="left:100%;top:0;min-width:180px;">
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=38">Lip Care</a></li>
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=39">Eye Liner</a></li>
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=40">Face Cream</a></li>
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=41">Nail Polish</a></li>
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=42">Beauty Cream</a></li>
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=43">Lacme</a></li>
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=44">Skin Care</a></li>
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=29">Lotion</a></li>
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=30">Hair Colour</a></li>
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=28">Napkin</a></li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </li>
 
                 <li><a href="<?php echo $base_path; ?>trimer.php">PRODUCTS</a></li>
                 <li><a href="<?php echo $base_path; ?>#deal">DEAL</a></li>
                 <li><a href="<?php echo $base_path; ?>contactus.php">CONTACT</a></li>
-                
+
                 <li class="spx-right-menu">
                     <ul class="menu-items">
                         <li>
                             <div class="collapse clearfix" id="search">
                                 <form class="navbar-form" method="get" action="<?php echo $base_path; ?>result.php">
                                     <div class="input-group">
-                                        <input type="text" name="user_query" placeholder="Search" class="form-control" required>
+                                        <input type="text" name="user_query" placeholder="Search..." class="form-control" required>
                                         <button type="submit" value="search" name="search" class="btn btn-primary">
                                             <i class="fa fa-search"></i>
                                         </button>
@@ -556,7 +785,7 @@ function addToCart(productId) {
     const btn = document.querySelector(`button[onclick*="addToCart(${productId})"]`);
     if (!btn) return;
     const originalText = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding...';
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
     btn.disabled = true;
     
     fetch('add_to_cart.php', {

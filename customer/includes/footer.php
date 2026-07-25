@@ -28,7 +28,7 @@
                 <h4>online shop</h4>
                 <ul>
                     <li><a href="#">Saloon Products</a></li><br><br>
-                    <li><a href="#">Parlor Prtoducts</a></li><br><br>
+                    <li><a href="#">Parlor Prtoduct</a></li><br><br>
                     <li><a href="#">Garments</a></li><br><br>
                     <li><a href="#">Others</a></li><br><br>
                 </ul>
