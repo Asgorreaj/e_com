@@ -283,16 +283,16 @@ include("functions/functions.php");
 }
 
 /* ============================================
-   PRODUCT GRID
+   PRODUCT GRID (FIXED FOR MULTI-COLUMN)
    ============================================ */
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(3, 1fr); /* ডেসটপে পাশাপাশি ৩টি থাকবে */
     gap: 20px;
 }
 
 /* ============================================
-   PRODUCT CARD
+   PRODUCT CARD (FIXED HEIGHT & IMAGE)
    ============================================ */
 .product-card {
     background: var(--white);
@@ -302,6 +302,9 @@ include("functions/functions.php");
     transition: var(--transition);
     border: 1px solid #f0f0f0;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .product-card:hover {
@@ -310,20 +313,25 @@ include("functions/functions.php");
     border-color: rgba(255,82,59,0.12);
 }
 
+/* 🔴 ইমেজ বক্সটি ফিক্সড সাইজ করা হলো যাতে পেজ লম্বা না হয়ে যায় */
 .product-card .image-wrap {
     position: relative;
-    padding-top: 100%;
+    width: 100%;
+    height: 200px;
     background: var(--bg-light);
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
 }
 
 .product-card .image-wrap img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
     transition: transform 0.5s ease;
 }
 
@@ -387,6 +395,10 @@ include("functions/functions.php");
 /* Product Info */
 .product-card .info {
     padding: 14px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: space-between;
 }
 
 .product-card .info .category {
@@ -558,6 +570,11 @@ include("functions/functions.php");
 /* ============================================
    RESPONSIVE
    ============================================ */
+@media (max-width: 1200px) {
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr); /* মিডিয়াম ডেসটপে ২টি করে */
+    }
+}
 
 /* Tablet */
 @media (max-width: 992px) {
@@ -566,16 +583,13 @@ include("functions/functions.php");
         gap: 20px;
     }
     
-    .shop-sidebar {
-        position: static;
-    }
-    
     .sidebar-toggle {
         display: flex !important;
     }
     
     .shop-sidebar {
         display: none;
+        position: static;
     }
     
     .shop-sidebar.open {
@@ -595,7 +609,11 @@ include("functions/functions.php");
     
     .product-grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
+        gap: 12px;
+    }
+
+    .product-card .image-wrap {
+        height: 150px;
     }
     
     .products-section {
@@ -650,8 +668,12 @@ include("functions/functions.php");
     }
     
     .product-grid {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(2, 1fr);
         gap: 10px;
+    }
+
+    .product-card .image-wrap {
+        height: 130px;
     }
     
     .products-section {
@@ -948,23 +970,27 @@ SHOP PAGE CONTENT
                         </div>
                     </div>
                     <div class="info">
-                        <div class="category"><?php echo htmlspecialchars($cat_name); ?></div>
-                        <div class="title">
-                            <a href="details.php?pro_id=<?php echo $pro_id; ?>">
-                                <?php echo htmlspecialchars($pro_title); ?>
-                            </a>
+                        <div>
+                            <div class="category"><?php echo htmlspecialchars($cat_name); ?></div>
+                            <div class="title">
+                                <a href="details.php?pro_id=<?php echo $pro_id; ?>">
+                                    <?php echo htmlspecialchars($pro_title); ?>
+                                </a>
+                            </div>
                         </div>
-                        <div class="price-row">
-                            <span class="current">£<?php echo number_format($pro_price, 2); ?></span>
-                            <span class="original">£<?php echo number_format($pro_price * 1.2, 2); ?></span>
-                        </div>
-                        <div class="btn-group">
-                            <a href="details.php?pro_id=<?php echo $pro_id; ?>" class="btn btn-view">
-                                <i class="fas fa-eye"></i> View
-                            </a>
-                            <button class="btn btn-cart" onclick="addToCart(<?php echo $pro_id; ?>)">
-                                <i class="fas fa-shopping-bag"></i> Add
-                            </button>
+                        <div>
+                            <div class="price-row">
+                                <span class="current">£<?php echo number_format($pro_price, 2); ?></span>
+                                <span class="original">£<?php echo number_format($pro_price * 1.2, 2); ?></span>
+                            </div>
+                            <div class="btn-group">
+                                <a href="details.php?pro_id=<?php echo $pro_id; ?>" class="btn btn-view">
+                                    <i class="fas fa-eye"></i> View
+                                </a>
+                                <button class="btn btn-cart" onclick="addToCart(<?php echo $pro_id; ?>)">
+                                    <i class="fas fa-shopping-bag"></i> Add
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1113,52 +1139,4 @@ function addToWishlist(productId) {
     .then(() => showNotification('❤️ Added to wishlist!', 'success'))
     .catch(() => showNotification('Please login to add to wishlist.', 'error'));
 }
-
-// ============================================
-// QUICK VIEW
-// ============================================
-function quickView(productId) {
-    window.location.href = 'details.php?pro_id=' + productId;
-}
-
-// ============================================
-// NOTIFICATION
-// ============================================
-function showNotification(message, type = 'success') {
-    const colors = {
-        success: '#00b894',
-        error: '#ff523b',
-        info: '#0984e3'
-    };
-    
-    const existing = document.querySelector('.shop-notification');
-    if(existing) existing.remove();
-    
-    const notification = document.createElement('div');
-    notification.className = 'shop-notification';
-    notification.textContent = message;
-    notification.style.cssText = `
-        position: fixed; top: 20px; right: 20px;
-        background: ${colors[type] || '#2d3436'};
-        color: #fff; padding: 15px 25px;
-        border-radius: 12px; z-index: 9999999;
-        transform: translateX(120%);
-        transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-        font-weight: 500; font-size: 14px;
-        max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-        font-family: 'Open Sans', sans-serif;
-    `;
-    document.body.appendChild(notification);
-    
-    requestAnimationFrame(() => {
-        notification.style.transform = 'translateX(0)';
-    });
-    
-    setTimeout(() => {
-        notification.style.transform = 'translateX(120%)';
-        setTimeout(() => notification.remove(), 400);
-    }, 3000);
-}
 </script>
-</body>
-</html>
