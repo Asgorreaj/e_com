@@ -15,7 +15,7 @@ if (!isset($_SESSION['admin_email'])) {
     <script>tinymce.init({selector:'textarea'});</script>
 </head>
 <body>
-
+ 
 <div class="row"><!--breadcrumb start-->
     <div class="col-lg-12">
         <div class="breadcrumb">
