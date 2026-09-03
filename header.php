@@ -62,21 +62,21 @@ $base_path = str_repeat('../', substr_count($current_path, '/') - 1);
             transition: all 0.3s ease;
         }
 
-        .header-1 .offer a:hover {
-            color: #ff523b;
-        }
-
+        /* Welcome Guest / User Hover fix */
         .header-1 .offer .btn-sm {
             background: rgba(255,255,255,0.12);
             padding: 6px 16px;
             border-radius: 50px;
             font-weight: 500;
             border: 1px solid rgba(255,255,255,0.15);
+            color: #ffffff !important;
+            cursor: default;
         }
 
         .header-1 .offer .btn-sm:hover {
-            background: #ff523b;
-            border-color: #ff523b;
+            background: rgba(255,255,255,0.12) !important;
+            border-color: rgba(255,255,255,0.15) !important;
+            color: #ffffff !important;
         }
 
         .header-1 .offer #pr {
@@ -197,15 +197,14 @@ $base_path = str_repeat('../', substr_count($current_path, '/') - 1);
             border-radius: 4px !important;
         }
 
-        /* Dropdown */
-        /* Level 1: SHOP dropdown */
+        /* Dropdown 1st Level */
         ul.spx-main-menu > li > ul.spx-dropdown {
             display: none !important;
             position: absolute !important;
             top: 100% !important;
             left: 0 !important;
             background-color: #ffffff !important;
-            min-width: 220px !important;
+            min-width: 230px !important;
             list-style: none !important;
             padding: 10px 0 !important;
             margin: 0 !important;
@@ -219,12 +218,11 @@ $base_path = str_repeat('../', substr_count($current_path, '/') - 1);
             display: block !important;
         }
 
-        /* Level 2: MAN/WOMAN sub-dropdown — flies out to the RIGHT */
         ul.spx-main-menu > li > ul.spx-dropdown > li {
             position: relative !important;
         }
 
-        /* Hide ALL nested dropdowns by default */
+        /* Dropdown 2nd Level (Sub-dropdown) */
         ul.spx-main-menu > li > ul.spx-dropdown > li > ul.spx-dropdown {
             display: none !important;
             position: absolute !important;
@@ -241,25 +239,20 @@ $base_path = str_repeat('../', substr_count($current_path, '/') - 1);
             border-radius: 0 4px 4px 0 !important;
         }
 
-        /* Show ONLY on hover of that specific li */
         ul.spx-main-menu > li > ul.spx-dropdown > li:hover > ul.spx-dropdown {
             display: block !important;
-        }
-
-        /* MAN link style */
-        ul.spx-main-menu > li > ul.spx-dropdown > li > a {
-            display: flex !important;
-            align-items: center !important;
-            justify-content: space-between !important;
         }
 
         ul.spx-main-menu li ul.spx-dropdown li a {
             color: #333333 !important;
             padding: 10px 20px !important;
-            display: block !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
             font-size: 13px !important;
             text-transform: capitalize !important;
             text-decoration: none !important;
+            transition: all 0.2s ease !important;
         }
 
         ul.spx-main-menu li ul.spx-dropdown li a:hover {
@@ -298,28 +291,44 @@ $base_path = str_repeat('../', substr_count($current_path, '/') - 1);
             margin-right: 5px;
         }
 
-        /* Search Box */
+        /* ===== SEARCH BOX FIX ===== */
+        .navbar-form {
+            margin: 0;
+            padding: 0;
+        }
+
         .navbar-form .input-group {
-            display: flex;
-            align-items: center;
+            display: flex !important;
+            align-items: center !important;
+            flex-wrap: nowrap !important;
+            margin: 0 !important;
         }
 
         .navbar-form .form-control {
-            padding: 6px 10px;
-            border: none;
-            border-radius: 4px 0 0 4px;
-            outline: none;
-            font-size: 13px;
-            width: 150px;
+            height: 32px !important;
+            padding: 4px 10px !important;
+            border: none !important;
+            border-radius: 4px 0 0 4px !important;
+            outline: none !important;
+            font-size: 13px !important;
+            width: 140px !important;
+            margin: 0 !important;
+            box-sizing: border-box !important;
         }
 
         .navbar-form .btn-primary {
-            background: #ff523b;
-            border: none;
-            color: white;
-            padding: 7px 12px;
-            border-radius: 0 4px 4px 0;
-            cursor: pointer;
+            height: 32px !important;
+            background: #ff523b !important;
+            border: none !important;
+            color: white !important;
+            padding: 0 12px !important;
+            border-radius: 0 4px 4px 0 !important;
+            cursor: pointer !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            margin: 0 !important;
+            box-sizing: border-box !important;
         }
 
         /* ===== CART SIDEBAR ===== */
@@ -588,6 +597,10 @@ $base_path = str_repeat('../', substr_count($current_path, '/') - 1);
                 position: static !important;
                 width: 100% !important;
             }
+            ul.spx-main-menu > li > ul.spx-dropdown > li > ul.spx-dropdown {
+                position: static !important;
+                width: 100% !important;
+            }
             .cart-sidebar {
                 width: 100% !important;
                 right: -100% !important;
@@ -598,7 +611,7 @@ $base_path = str_repeat('../', substr_count($current_path, '/') - 1);
 <body>
 
 <!-- ===== CART SIDEBAR ===== -->
-<div class="cart-sidebar-overlay" id="cartOverlay"></div>
+<div class="cart-sidebar-overlay" id="cartOverlay" onclick="closeCartSidebar()"></div>
 <div class="cart-sidebar" id="cartSidebar">
     <div class="cart-sidebar-header">
         <h3>🛒 Your Cart</h3>
@@ -643,7 +656,7 @@ HEADER - START
             <img src="<?php echo $base_path; ?>website/all/logo5.svg" alt="Shopixia Logo"> 
         </a>                     
         <div class="offer">
-            <a href="#" class="btn-sm">
+            <a href="javascript:void(0)" class="btn-sm">
                 <?php
                 if (!isset($_SESSION['customer_email'])){
                     echo '<i class="fas fa-user"></i> Welcome Guest';
@@ -664,17 +677,18 @@ HEADER - START
             <ul class="spx-main-menu">
                 <li><a href="<?php echo $base_path; ?>index.php">HOME</a></li>
 
-                <!-- SHOP: MAN | WOMAN dropdown -->
+                <!-- SHOP DROPDOWN -->
                 <li>
                     <a href="#">SHOP <i class="fa fa-caret-down"></i></a>
                     <ul class="spx-dropdown">
 
+                        <!-- MAN Subdropdown -->
                         <li style="position:relative;">
                             <a href="<?php echo $base_path; ?>trimer.php?cat=7" style="font-weight:700;">
-                                <i class="fas fa-male" style="margin-right:6px;color:#ff523b;"></i> MAN
-                                <i class="fa fa-caret-right" style="float:right;margin-top:3px;font-size:11px;"></i>
+                                <span><i class="fas fa-male" style="margin-right:8px;color:#ff523b;"></i> MAN</span>
+                                <i class="fa fa-caret-right"></i>
                             </a>
-                            <ul class="spx-dropdown" style="left:100%;top:0;min-width:180px;">
+                            <ul class="spx-dropdown">
                                 <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=22">Trimmer</a></li>
                                 <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=23">Hair Dryer</a></li>
                                 <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=24">Straightener</a></li>
@@ -689,12 +703,13 @@ HEADER - START
                             </ul>
                         </li>
 
+                        <!-- WOMAN Subdropdown -->
                         <li style="position:relative;">
                             <a href="<?php echo $base_path; ?>trimer.php?cat=8" style="font-weight:700;">
-                                <i class="fas fa-female" style="margin-right:6px;color:#ff523b;"></i> WOMAN
-                                <i class="fa fa-caret-right" style="float:right;margin-top:3px;font-size:11px;"></i>
+                                <span><i class="fas fa-female" style="margin-right:8px;color:#ff523b;"></i> WOMAN</span>
+                                <i class="fa fa-caret-right"></i>
                             </a>
-                            <ul class="spx-dropdown" style="left:100%;top:0;min-width:180px;">
+                            <ul class="spx-dropdown">
                                 <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=38">Lip Care</a></li>
                                 <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=39">Eye Liner</a></li>
                                 <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=40">Face Cream</a></li>
@@ -708,11 +723,63 @@ HEADER - START
                             </ul>
                         </li>
 
+                        <!-- ELECTRONICS Subdropdown -->
+                        <li style="position:relative;">
+                            <a href="<?php echo $base_path; ?>trimer.php" style="font-weight:600;">
+                                <span><i class="fas fa-plug" style="margin-right:8px;color:#ff523b;"></i> Electronics</span>
+                                <i class="fa fa-caret-right"></i>
+                            </a>
+                            <ul class="spx-dropdown">
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=22">Trimmer</a></li>
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=23">Hair Dryer</a></li>
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=24">Straightener</a></li>
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=32">Classic Shaver</a></li>
+                            </ul>
+                        </li>
+
+                        <!-- FASHION & CLOTHING Subdropdown -->
+                        <li style="position:relative;">
+                            <a href="<?php echo $base_path; ?>trimer.php" style="font-weight:600;">
+                                <span><i class="fas fa-tshirt" style="margin-right:8px;color:#ff523b;"></i> Fashion & Clothing</span>
+                                <i class="fa fa-caret-right"></i>
+                            </a>
+                            <ul class="spx-dropdown">
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=46">Inner Wear</a></li>
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=48">Cap</a></li>
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=49">Hankey</a></li>
+                            </ul>
+                        </li>
+
+                        <!-- BEAUTY & CARE Subdropdown -->
+                        <li style="position:relative;">
+                            <a href="<?php echo $base_path; ?>trimer.php" style="font-weight:600;">
+                                <span><i class="fas fa-heart" style="margin-right:8px;color:#ff523b;"></i> Beauty & Care</span>
+                                <i class="fa fa-caret-right"></i>
+                            </a>
+                            <ul class="spx-dropdown">
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=38">Lip Care</a></li>
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=40">Face Cream</a></li>
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=44">Skin Care</a></li>
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=29">Lotion</a></li>
+                            </ul>
+                        </li>
+
+                        <!-- ACCESSORIES Subdropdown -->
+                        <li style="position:relative;">
+                            <a href="<?php echo $base_path; ?>trimer.php" style="font-weight:600;">
+                                <span><i class="fas fa-gem" style="margin-right:8px;color:#ff523b;"></i> Accessories</span>
+                                <i class="fa fa-caret-right"></i>
+                            </a>
+                            <ul class="spx-dropdown">
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=56">Wallet</a></li>
+                                <li><a href="<?php echo $base_path; ?>trimer.php?p_cat=57">Belt</a></li>
+                            </ul>
+                        </li>
+
                     </ul>
                 </li>
 
                 <li><a href="<?php echo $base_path; ?>trimer.php">PRODUCTS</a></li>
-                <li><a href="<?php echo $base_path; ?>#deal">DEAL</a></li>
                 <li><a href="<?php echo $base_path; ?>contactus.php">CONTACT</a></li>
 
                 <li class="spx-right-menu">
@@ -892,15 +959,6 @@ function showCartNotification(message, type = 'success') {
         notification.classList.remove('show');
     }, 3000);
 }
-
-// ============================================
-// EVENT LISTENERS
-// ============================================
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('cartOverlay').addEventListener('click', closeCartSidebar);
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') { closeCartSidebar(); }
-    });
-    loadCartSidebar();
-});
 </script>
+</body>
+</html>

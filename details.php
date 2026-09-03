@@ -1,19 +1,26 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 include("includes/db.php");
 include("functions/functions.php");
 ?>
 <?php include("header.php"); ?>
 
 <?php
+$p_cat_id = 0;
+$cat_id = 0;
+$pro_id = 0;
+
 if(isset($_GET['pro_id'])){
-    $pro_id = $_GET['pro_id'];
+    $pro_id = mysqli_real_escape_string($con, $_GET['pro_id']);
     $get_product = "SELECT * FROM products WHERE product_id='$pro_id'";
     $run_product = mysqli_query($con, $get_product);
     $row_product = mysqli_fetch_array($run_product);
     
     if($row_product){
-        $p_cat_id = $row_product['p_cat_id'];
+        $p_cat_id = isset($row_product['p_cat_id']) ? $row_product['p_cat_id'] : 0;
+        $cat_id = isset($row_product['cat_id']) ? $row_product['cat_id'] : 0;
         $p_title = $row_product['product_title'];
         $p_price = $row_product['product_price'];
         $p_desc = $row_product['product_desc'];
@@ -25,7 +32,7 @@ if(isset($_GET['pro_id'])){
         $get_p_cat = "SELECT p_cat_title FROM product_category WHERE p_cat_id='$p_cat_id'";
         $run_p_cat = mysqli_query($con, $get_p_cat);
         $row_p_cat = mysqli_fetch_array($run_p_cat);
-        $p_cat_title = isset($row_p_cat['p_cat_title']) ? $row_p_cat['p_cat_title'] : 'Uncategorized';
+        $p_cat_title = isset($row_p_cat['p_cat_title']) ? $row_p_cat['p_cat_title'] : 'General';
     }
 }
 ?>
@@ -287,12 +294,19 @@ if(isset($_GET['pro_id'])){
     padding: 0 20px;
 }
 
+.related-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
 .related-section h3 {
     font-size: 24px;
     font-weight: 700;
     color: #1a1a2e;
-    margin-bottom: 25px;
-    padding-left: 10px;
+    margin: 0;
+    padding-left: 12px;
     position: relative;
 }
 
@@ -306,6 +320,22 @@ if(isset($_GET['pro_id'])){
     height: 28px;
     background: linear-gradient(135deg, #ff523b, #ff6b5a);
     border-radius: 4px;
+}
+
+.see-more-link {
+    color: #ff523b;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.see-more-link:hover {
+    color: #e03e27;
+    transform: translateX(3px);
 }
 
 .related-grid {
@@ -359,141 +389,48 @@ if(isset($_GET['pro_id'])){
     font-size: 15px;
 }
 
-/* ============================================
-   RESPONSIVE
-   ============================================ */
+.more-btn-container {
+    text-align: center;
+    margin-top: 35px;
+}
+
+.btn-view-more {
+    display: inline-block;
+    padding: 12px 30px;
+    background: #fff;
+    color: #ff523b;
+    border: 2px solid #ff523b;
+    border-radius: 30px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-view-more:hover {
+    background: #ff523b;
+    color: #fff;
+    box-shadow: 0 5px 15px rgba(255,82,59,0.25);
+}
+
+/* Responsive */
 @media (max-width: 992px) {
     .product-details-grid {
         grid-template-columns: 1fr;
         gap: 30px;
         padding: 20px;
     }
-    
-    .product-info h1 {
-        font-size: 24px;
-    }
-    
-    .product-info .price {
-        font-size: 28px;
-    }
 }
-
 @media (max-width: 768px) {
-    .details-wrapper {
-        padding: 0 15px;
-        margin: 20px auto;
-    }
-    
-    .product-details-grid {
-        padding: 15px;
-        border-radius: 12px;
-    }
-    
-    .product-info h1 {
-        font-size: 20px;
-    }
-    
-    .product-info .price {
-        font-size: 24px;
-    }
-    
-    .product-info .form-group {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    
-    .product-info .form-group label {
-        min-width: auto;
-    }
-    
-    .product-info .form-group select {
-        max-width: 100%;
-    }
-    
-    .add-to-cart-btn {
-        font-size: 16px;
-        padding: 14px;
-    }
-    
-    .related-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-    }
-    
-    .thumbnail-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 8px;
-    }
-    
-    .product-meta {
-        flex-direction: column;
-        gap: 10px;
-    }
-}
-
-@media (max-width: 480px) {
-    .product-details-grid {
-        padding: 12px;
-    }
-    
-    .product-info h1 {
-        font-size: 18px;
-    }
-    
-    .product-info .price {
-        font-size: 20px;
-    }
-    
-    .product-info .description {
-        font-size: 14px;
-    }
-    
-    .add-to-cart-btn {
-        font-size: 14px;
-        padding: 12px;
-    }
-    
-    .related-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-    }
-    
-    .related-item {
-        padding: 10px;
-    }
-    
-    .related-item img {
-        height: 80px;
-    }
-    
-    .main-image {
-        aspect-ratio: 1/1;
-    }
-}
-
-@media (max-width: 360px) {
-    .related-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-    }
-    
-    .related-item {
-        padding: 8px;
-    }
-    
-    .related-item h4 {
-        font-size: 11px;
-    }
-    
-    .related-item .price {
-        font-size: 13px;
-    }
+    .details-wrapper { padding: 0 15px; margin: 20px auto; }
+    .product-details-grid { padding: 15px; border-radius: 12px; }
+    .related-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
 }
 </style>
 
 <!-- ============================================
-BREADCRUMB
+BREADCRUMB & PRODUCT DETAILS
 ============================================ -->
+<?php if(isset($row_product) && $row_product): ?>
 <div class="details-wrapper">
     <div class="breadcrumb-custom">
         <a href="index.php">Home</a> / 
@@ -501,11 +438,7 @@ BREADCRUMB
         <span><?php echo $p_title; ?></span>
     </div>
 
-    <!-- ============================================
-    PRODUCT DETAILS
-    ============================================ -->
     <div class="product-details-grid">
-        
         <!-- Product Images -->
         <div class="product-images">
             <div class="main-image">
@@ -600,17 +533,31 @@ BREADCRUMB
         </div>
     </div>
 </div>
+<?php endif; ?>
 
 <!-- ============================================
-YOU MAY ALSO LIKE
+YOU MAY ALSO LIKE (MORE PRODUCTS)
 ============================================ -->
 <section class="related-section">
-    <h3>🔥 You May Also Like</h3>
+    <div class="related-header">
+        <h3>🔥 More Products You'll Love</h3>
+        <a href="trimer.php" class="see-more-link">See All <i class="fas fa-arrow-right"></i></a>
+    </div>
+
     <div class="related-grid">
         <?php
-        $get_related = "SELECT * FROM products WHERE p_cat_id='$p_cat_id' AND product_id != '$pro_id' ORDER BY RAND() LIMIT 6";
+        // ১. ক্যাটাগরির অন্যান্য প্রোডাক্ট তোলা (সর্বোচ্চ ৮টি প্রোডাক্ট লিমিট রাখা হয়েছে)
+        $get_related = "SELECT * FROM products WHERE (p_cat_id='$p_cat_id' OR cat_id='$cat_id') AND product_id != '$pro_id' ORDER BY RAND() LIMIT 8";
         $run_related = mysqli_query($con, $get_related);
-        
+        $count_related = mysqli_num_rows($run_related);
+
+        // ২. যদি সমজাতীয় প্রোডাক্ট ৮টির কম হয়, বাকি খালি জায়গাগুলো ডাটাবেজের সাধারণ প্রোডাক্ট দিয়ে পূরণ করা
+        if($count_related < 8) {
+            $needed = 8 - $count_related;
+            $get_related = "SELECT * FROM products WHERE product_id != '$pro_id' ORDER BY RAND() LIMIT 8";
+            $run_related = mysqli_query($con, $get_related);
+        }
+
         if(mysqli_num_rows($run_related) > 0) {
             while($row = mysqli_fetch_array($run_related)) {
                 $r_id = $row['product_id'];
@@ -620,7 +567,7 @@ YOU MAY ALSO LIKE
         ?>
         <div class="related-item">
             <a href="details.php?pro_id=<?php echo $r_id; ?>">
-                <img src="admin_area/product_images/<?php echo $r_img1; ?>" alt="<?php echo $r_title; ?>">
+                <img src="admin_area/product_images/<?php echo $r_img1; ?>" alt="<?php echo htmlspecialchars($r_title); ?>">
             </a>
             <h4>
                 <a href="details.php?pro_id=<?php echo $r_id; ?>">
@@ -631,73 +578,24 @@ YOU MAY ALSO LIKE
         </div>
         <?php 
             }
-        } else {
+        } 
         ?>
-        <div style="grid-column:1/-1;text-align:center;padding:30px;color:#6c757d;">
-            <i class="fas fa-box-open" style="font-size:32px;display:block;margin-bottom:10px;color:#dee2e6;"></i>
-            <p>No related products found</p>
-        </div>
-        <?php } ?>
+    </div>
+
+    <!-- View More / More Products Button -->
+    <div class="more-btn-container">
+        <a href="trimer.php" class="btn-view-more"><i class="fas fa-th-large"></i> Explore More Products</a>
     </div>
 </section>
 
 <?php include("includes/footer.php"); ?>
 
 <script>
-// ============================================
-// CHANGE MAIN IMAGE ON THUMBNAIL CLICK
-// ============================================
 function changeImage(src, element) {
     document.getElementById('mainProductImage').src = src;
-    
-    // Remove active class from all thumbs
     document.querySelectorAll('.thumbnail-grid .thumb').forEach(function(thumb) {
         thumb.classList.remove('active');
     });
-    
-    // Add active class to clicked thumb
     element.classList.add('active');
 }
-
-// ============================================
-// AUTO SLIDE FOR IMAGES
-// ============================================
-let slideIndex = 1;
-showSlides(slideIndex);
-
-function plusSlides(n) {
-    showSlides(slideIndex += n);
-}
-
-function currentSlide(n) {
-    showSlides(slideIndex = n);
-}
-
-function showSlides(n) {
-    let slides = document.getElementsByClassName("mySlides");
-    let dots = document.getElementsByClassName("dot");
-    
-    if (slides.length > 0) {
-        if (n > slides.length) { slideIndex = 1; }
-        if (n < 1) { slideIndex = slides.length; }
-        
-        for (let i = 0; i < slides.length; i++) {
-            slides[i].style.display = "none";
-        }
-        
-        for (let i = 0; i < dots.length; i++) {
-            dots[i].className = dots[i].className.replace(" active", "");
-        }
-        
-        if (slides[slideIndex - 1]) {
-            slides[slideIndex - 1].style.display = "block";
-        }
-        
-        if (dots[slideIndex - 1]) {
-            dots[slideIndex - 1].className += " active";
-        }
-    }
-}
 </script>
-</body>
-</html>
